@@ -21,7 +21,6 @@ def scaled_dot_product(query, key, value):
 class AttentionHead(tf.keras.layers.Layer):
     def __init__(self, embed_dim, head_dim, name='attention_head'):
         super(AttentionHead, self).__init__(name=name)
-        
         self.query_dense = tf.keras.layers.Dense(head_dim)
         self.key_dense = tf.keras.layers.Dense(head_dim)
         self.value_dense = tf.keras.layers.Dense(head_dim)
