@@ -41,7 +41,7 @@ class MultiAttentionHead(tf.keras.layers.Layer):
         self.output_layer = tf.keras.layers.Dense(embed_dim)
 
     def call(self, input):
-        x = tf.concat([h(input) for h in self.heads])
+        x = tf.concat([h(input) for h in self.heads], axis=-1)
         x = self.output_layer(x)
         return x
 
@@ -51,7 +51,7 @@ def test():
     encoder = tiktoken.get_encoding('p50k_base')
     sentence_enc = tf.convert_to_tensor(encoder.encode(sentence), dtype=tf.int64)
     sentence_enc = tf.expand_dims(sentence_enc, 0)
-    embeds = tf.keras.layers.Embedding(50257, 64)(sentence_enc)
+    embeds = tf.keras.layers.Embedding(50257, 8)(sentence_enc)
     print(f'Embeds shape: {embeds.shape}\n{embeds}')
 
     embed_dim = embeds.shape[-1]
@@ -59,7 +59,9 @@ def test():
     atten_out = head(embeds)
     print(f'Attention out shape: {atten_out.shape}\n{atten_out}')
 
-    
+    head = MultiAttentionHead(embed_dim, 4)
+    atten_out = head(embeds)
+    print(f'Multi head attention out shape: {atten_out.shape}\n{atten_out}')
 
 if __name__ == '__main__':
     test()
