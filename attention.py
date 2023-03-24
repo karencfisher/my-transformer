@@ -41,7 +41,8 @@ class MultiAttentionHead(tf.keras.layers.Layer):
         self.output_layer = tf.keras.layers.Dense(embed_dim)
 
     def call(self, input):
-        x = tf.concat([h(input) for h in self.heads], axis=-1)
+        x = [h(input) for h in self.heads]
+        x = tf.concat(x, axis=-1)
         x = self.output_layer(x)
         return x
 
