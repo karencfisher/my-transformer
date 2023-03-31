@@ -19,7 +19,7 @@ def scaled_dot_product(query, key, value):
 
 
 class AttentionHead(tf.keras.layers.Layer):
-    def __init__(self, embed_dim, head_dim, name='attention_head'):
+    def __init__(self, head_dim, name='attention_head'):
         super(AttentionHead, self).__init__(name=name)
         self.query_dense = tf.keras.layers.Dense(head_dim)
         self.key_dense = tf.keras.layers.Dense(head_dim)
@@ -34,11 +34,11 @@ class AttentionHead(tf.keras.layers.Layer):
     
 
 class MultiAttentionHead(tf.keras.layers.Layer):
-    def __init__(self, embed_dim, num_heads, name='multi_attention_head'):
+    def __init__(self, config, name='multi_attention_head'):
         super(MultiAttentionHead, self).__init__(name=name)
-        head_dim = embed_dim // num_heads
-        self.heads = [AttentionHead(embed_dim, head_dim) for _ in range(num_heads)]
-        self.output_layer = tf.keras.layers.Dense(embed_dim)
+        head_dim = config['embed_dim'] // config['num_heads']
+        self.heads = [AttentionHead(head_dim) for _ in range(config['num_heads'])]
+        self.output_layer = tf.keras.layers.Dense(config['embed_dim'])
 
     def call(self, input):
         x = [h(input) for h in self.heads]
@@ -55,12 +55,12 @@ def test():
     embeds = tf.keras.layers.Embedding(50257, 8)(sentence_enc)
     print(f'Embeds shape: {embeds.shape}\n{embeds}')
 
-    embed_dim = embeds.shape[-1]
-    head = AttentionHead(embed_dim, embed_dim)
+    config = {'embed_dim': embeds.shape[-1], 'num_heads': 4}
+    head = AttentionHead(config['embed_dim'])
     atten_out = head(embeds)
     print(f'Attention out shape: {atten_out.shape}\n{atten_out}')
 
-    head = MultiAttentionHead(embed_dim, 4)
+    head = MultiAttentionHead(config)
     atten_out = head(embeds)
     print(f'Multi head attention out shape: {atten_out.shape}\n{atten_out}')
 
