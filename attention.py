@@ -36,9 +36,9 @@ class AttentionHead(tf.keras.layers.Layer):
 class MultiAttentionHead(tf.keras.layers.Layer):
     def __init__(self, config, name='multi_attention_head'):
         super(MultiAttentionHead, self).__init__(name=name)
-        head_dim = config['embed_dim'] // config['num_heads']
+        head_dim = config['hidden_size'] // config['num_heads']
         self.heads = [AttentionHead(head_dim) for _ in range(config['num_heads'])]
-        self.output_layer = tf.keras.layers.Dense(config['embed_dim'])
+        self.output_layer = tf.keras.layers.Dense(config['hidden_size'])
 
     def call(self, input):
         x = [h(input) for h in self.heads]
@@ -58,9 +58,8 @@ def test():
     embeds = tf.keras.layers.Embedding(config['vocab_size'], 
                                        config['hidden_size'])(sentence_enc)
     print(f'Embeds shape: {embeds.shape}\n{embeds}')
-    config['embed_dim'] = embeds.shape[-1]
     
-    head = AttentionHead(config['embed_dim'])
+    head = AttentionHead(config['hidden_size'])
     atten_out = head(embeds)
     print(f'Attention out shape: {atten_out.shape}\n{atten_out}')
 
