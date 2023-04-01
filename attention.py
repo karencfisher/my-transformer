@@ -48,14 +48,18 @@ class MultiAttentionHead(tf.keras.layers.Layer):
 
 
 def test():
+    config = {'num_heads': 4, 
+              'vocab_size': 50257,
+              'hidden_size': 8}
     sentence = 'It is a good day to have lunch'
     encoder = tiktoken.get_encoding('p50k_base')
     sentence_enc = tf.convert_to_tensor(encoder.encode(sentence), dtype=tf.int64)
     sentence_enc = tf.expand_dims(sentence_enc, 0)
-    embeds = tf.keras.layers.Embedding(50257, 8)(sentence_enc)
+    embeds = tf.keras.layers.Embedding(config['vocab_size'], 
+                                       config['hidden_size'])(sentence_enc)
     print(f'Embeds shape: {embeds.shape}\n{embeds}')
-
-    config = {'embed_dim': embeds.shape[-1], 'num_heads': 4}
+    config['embed_dim'] = embeds.shape[-1]
+    
     head = AttentionHead(config['embed_dim'])
     atten_out = head(embeds)
     print(f'Attention out shape: {atten_out.shape}\n{atten_out}')
