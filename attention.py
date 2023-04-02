@@ -7,9 +7,11 @@ import tensorflow as tf
 import tiktoken
 
 
-def scaled_dot_product(query, key, value):
+def scaled_dot_product(query, key, value, mask=None):
         # calculate similarities between query and keys
         matmul_qk = tf.matmul(query, key, transpose_b=True)
+        if mask is not None:
+            matmul_qk = tf.where(mask, matmul_qk, float('-inf'))
         query_dim = tf.cast(query.shape[-1], dtype=tf.float32)
         logits = matmul_qk / tf.math.sqrt(query_dim)
 
@@ -50,10 +52,10 @@ class MultiAttentionHead(tf.keras.layers.Layer):
 def test():
     config = {'num_heads': 4, 
               'vocab_size': 50257,
-              'hidden_size': 8}
+              'hidden_size': 128}
     sentence = 'It is a good day to have lunch'
     encoder = tiktoken.get_encoding('p50k_base')
-    sentence_enc = tf.convert_to_tensor(encoder.encode(sentence), dtype=tf.int64)
+    sentence_enc = tf.convert_to_tensor(encoder.encode(sentence) + [0, 0], dtype=tf.int64)
     sentence_enc = tf.expand_dims(sentence_enc, 0)
     embeds = tf.keras.layers.Embedding(config['vocab_size'], 
                                        config['hidden_size'])(sentence_enc)

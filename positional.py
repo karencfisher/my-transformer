@@ -29,7 +29,7 @@ class PositionalEmbeddings(tf.keras.layers.Layer):
 def test():
     config = {'num_heads': 4, 
               'vocab_size': 50257,
-              'hidden_size': 8,
+              'hidden_size': 128,
               'max_position_embeds': 100}
     sentence = 'It is a good day to have lunch'
     encoder = tiktoken.get_encoding('p50k_base')
