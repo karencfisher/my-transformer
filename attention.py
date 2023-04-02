@@ -21,25 +21,26 @@ def scaled_dot_product(query, key, value, mask=None):
 
 
 class AttentionHead(tf.keras.layers.Layer):
-    def __init__(self, head_dim, name='attention_head'):
+    def __init__(self, head_dim, mask=None, name='attention_head'):
         super(AttentionHead, self).__init__(name=name)
         self.query_dense = tf.keras.layers.Dense(head_dim)
         self.key_dense = tf.keras.layers.Dense(head_dim)
         self.value_dense = tf.keras.layers.Dense(head_dim)
+        self.mask = mask
         
     def call(self, input):
         q = self.query_dense(input)
         k = self.key_dense(input)
         v = self.value_dense(input)
-        attn = scaled_dot_product(q, k, v)
+        attn = scaled_dot_product(q, k, v, mask=self.mask)
         return attn
     
 
 class MultiAttentionHead(tf.keras.layers.Layer):
-    def __init__(self, config, name='multi_attention_head'):
+    def __init__(self, config, mask=None, name='multi_attention_head'):
         super(MultiAttentionHead, self).__init__(name=name)
         head_dim = config['hidden_size'] // config['num_heads']
-        self.heads = [AttentionHead(head_dim) for _ in range(config['num_heads'])]
+        self.heads = [AttentionHead(head_dim, mask=mask) for _ in range(config['num_heads'])]
         self.output_layer = tf.keras.layers.Dense(config['hidden_size'])
 
     def call(self, input):
