@@ -1,7 +1,8 @@
 ### My Transformer
 
 Just writing a transformer from scratch (using Tensorflow) to understand the basic 
-architecture.
+architecture. Following so far examples from *Natural Language Processing With Transformers*
+chapter 3, but rewriting using Tensorflow rather than Pytorch.
 
 Encoder works. It builds, trains, and tested on a toy data set. The test is:
 
