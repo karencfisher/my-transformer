@@ -1,8 +1,8 @@
 import tensorflow as tf
 
-from attention import MultiAttentionHead
-from positional import PositionalEmbeddings
-from feed_forward import FeedForward
+from transformer.attention import MultiAttentionHead
+from transformer.positional import PositionalEmbeddings
+from transformer.feed_forward import FeedForward
 
 
 class EncoderLayer(tf.keras.layers.Layer):
