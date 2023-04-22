@@ -12,4 +12,11 @@ Encoder works. It builds, trains, and tested on a toy data set. The test is:
 4) Train the model (end to end), training the encoder and classifier
 5) Write similar sentences, and predict the last words of each
 
+Then, use the now pretrained encoder and use it in transfer learning for sentiment analysis.
+
+1) Load the pretrained encoder model
+2) Add new classifier head, wither positive or negative
+3) Train on corpus (turns out fine tuning the encoder helps)
+4) Write similar sentences and predict their sentiment
+
 It is just a toy data set and model so far, but POC that the encoder in fact trains apprently as it should.
