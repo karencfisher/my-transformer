@@ -19,4 +19,4 @@ Then, use the now pretrained encoder and use it in transfer learning for sentime
 3) Train on corpus (turns out fine tuning the encoder helps)
 4) Write similar sentences and predict their sentiment
 
-It is just a toy data set and model so far, but POC that the encoder in fact trains apprently as it should.
+It is just a toy data set and model so far, but POC that the encoder in fact trains and be used as it should.
