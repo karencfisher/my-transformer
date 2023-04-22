@@ -2,7 +2,8 @@
 
 Just writing a transformer from scratch (using Tensorflow) to understand the basic 
 architecture. Following so far examples from *Natural Language Processing With Transformers*
-chapter 3, but rewriting using Tensorflow rather than Pytorch.
+chapter 3, but rewriting using Tensorflow rather than Pytorch and putting it all together for
+it to actually work.
 
 Encoder works. It builds, trains, and tested on a toy data set. The test is:
 
