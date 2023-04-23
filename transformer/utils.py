@@ -1,4 +1,3 @@
-from tensorflow.keras.utils import pad_sequences
 import numpy as np
 
 
@@ -31,7 +30,10 @@ class WordTokenizer:
         return len(self.vocab)
 
     def tokenize(self, document, max_len=100):
-        tokens = [self.vocab[word] for word in document.strip().split()]
+        words = document.strip().split()
+        tokens = []
+        for word in words:
+            tokens.append(self.vocab.get(word, 1))
         tokens_n = len(tokens)
         tokens = [0] * (max_len - tokens_n) + tokens
         if self.make_mask:
@@ -41,6 +43,6 @@ class WordTokenizer:
     
     def transform(self, corpus, max_len=100):
         assert self.vocab is not None, 'Run fit method on corpus first.'
-        tokens = list(map(self.tokenize, corpus))
+        tokens = list(map(lambda x: self.tokenize(x, max_len=max_len), corpus))
         return np.array(tokens)
 
