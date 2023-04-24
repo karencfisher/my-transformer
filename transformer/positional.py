@@ -27,20 +27,3 @@ class PositionalEmbeddings(tf.keras.layers.Layer):
         embeddings = self.dropout(embeddings)
         return embeddings
 
-
-def test():
-    config = {'num_heads': 4, 
-              'vocab_size': 50257,
-              'hidden_size': 128,
-              'max_position_embeds': 100}
-    sentence = 'It is a good day to have lunch'
-    encoder = tiktoken.get_encoding('p50k_base')
-    sentence_enc = tf.convert_to_tensor(encoder.encode(sentence), dtype=tf.int64)
-    sentence_enc = tf.expand_dims(sentence_enc, 0)
-
-    embedding_layer = PositionalEmbeddings(config)
-    pos_embed = embedding_layer(sentence_enc)
-    print(f'Positional embed shape: {pos_embed.shape}')
-
-if __name__ == '__main__':
-    test()

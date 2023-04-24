@@ -38,11 +38,19 @@ class WordTokenizer:
         tokens = [0] * (max_len - tokens_n) + tokens
         if self.make_mask:
             mask = list(map(lambda x: 0 if x == 0 else 1, tokens))
-            return [tokens, mask]
-        return tokens
+        else:
+            mask = None
+        return tokens, mask
     
     def transform(self, corpus, max_len=100):
         assert self.vocab is not None, 'Run fit method on corpus first.'
-        tokens = list(map(lambda x: self.tokenize(x, max_len=max_len), corpus))
+        tokens = []
+        masks = []
+        for document in corpus:
+            token_ids, mask = self.tokenize(document, max_len=max_len)
+            tokens.append(token_ids)
+            masks.append(mask)
+        if self.make_mask:
+            tokens = [tokens, masks]
         return np.array(tokens)
 
