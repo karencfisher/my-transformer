@@ -4,7 +4,6 @@ Attention
 
 
 import tensorflow as tf
-import tiktoken
 
 
 def scaled_dot_product(query, key, value, mask=None):

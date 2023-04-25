@@ -1,5 +1,4 @@
 import tensorflow as tf
-import tiktoken
 
 
 class PositionalEmbeddings(tf.keras.layers.Layer):
